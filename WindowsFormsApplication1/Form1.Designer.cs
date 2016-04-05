@@ -52,6 +52,9 @@
             this.profbasesDataSetBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.uOuDn = new System.Windows.Forms.TextBox();
             this.ouType = new System.Windows.Forms.TextBox();
+            this.nExp = new System.Windows.Forms.CheckBox();
+            this.nCont = new System.Windows.Forms.CheckBox();
+            this.uDN = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this._prof_basesDataSet)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.profbasesDataSetBindingSource)).BeginInit();
@@ -235,16 +238,46 @@
             // 
             // ouType
             // 
-            this.ouType.Location = new System.Drawing.Point(558, 326);
+            this.ouType.Location = new System.Drawing.Point(558, 352);
             this.ouType.Name = "ouType";
             this.ouType.Size = new System.Drawing.Size(205, 20);
             this.ouType.TabIndex = 30;
+            // 
+            // nExp
+            // 
+            this.nExp.AutoSize = true;
+            this.nExp.Location = new System.Drawing.Point(559, 416);
+            this.nExp.Name = "nExp";
+            this.nExp.Size = new System.Drawing.Size(80, 17);
+            this.nExp.TabIndex = 31;
+            this.nExp.Text = "checkBox1";
+            this.nExp.UseVisualStyleBackColor = true;
+            // 
+            // nCont
+            // 
+            this.nCont.AutoSize = true;
+            this.nCont.Location = new System.Drawing.Point(558, 439);
+            this.nCont.Name = "nCont";
+            this.nCont.Size = new System.Drawing.Size(80, 17);
+            this.nCont.TabIndex = 32;
+            this.nCont.Text = "checkBox2";
+            this.nCont.UseVisualStyleBackColor = true;
+            // 
+            // uDN
+            // 
+            this.uDN.Location = new System.Drawing.Point(559, 378);
+            this.uDN.Name = "uDN";
+            this.uDN.Size = new System.Drawing.Size(204, 20);
+            this.uDN.TabIndex = 34;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(774, 753);
+            this.Controls.Add(this.uDN);
+            this.Controls.Add(this.nCont);
+            this.Controls.Add(this.nExp);
             this.Controls.Add(this.ouType);
             this.Controls.Add(this.uOuDn);
             this.Controls.Add(this.button3);
@@ -301,6 +334,9 @@
         private System.Windows.Forms.BindingSource profbasesDataSetBindingSource;
         private System.Windows.Forms.TextBox uOuDn;
         private System.Windows.Forms.TextBox ouType;
+        private System.Windows.Forms.CheckBox nExp;
+        private System.Windows.Forms.CheckBox nCont;
+        private System.Windows.Forms.TextBox uDN;
     }
 }
 

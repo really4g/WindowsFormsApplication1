@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.button1 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
@@ -47,7 +48,13 @@
             this.label1 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.button3 = new System.Windows.Forms.Button();
+            this._prof_basesDataSet = new WindowsFormsApplication1._prof_basesDataSet();
+            this.profbasesDataSetBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.uOuDn = new System.Windows.Forms.TextBox();
+            this.ouType = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this._prof_basesDataSet)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.profbasesDataSetBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
@@ -103,10 +110,12 @@
             // 
             // DomainTree
             // 
-            this.DomainTree.Location = new System.Drawing.Point(242, 327);
+            this.DomainTree.Location = new System.Drawing.Point(242, 352);
             this.DomainTree.Name = "DomainTree";
-            this.DomainTree.Size = new System.Drawing.Size(310, 338);
+            this.DomainTree.Size = new System.Drawing.Size(310, 313);
             this.DomainTree.TabIndex = 25;
+            this.DomainTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.DomainTree_AfterSelect);
+            this.DomainTree.DoubleClick += new System.EventHandler(this.DomainTree_DoubleClick);
             // 
             // uMobile
             // 
@@ -199,7 +208,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(161, 327);
+            this.button3.Location = new System.Drawing.Point(162, 323);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 28;
@@ -207,11 +216,37 @@
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
+            // _prof_basesDataSet
+            // 
+            this._prof_basesDataSet.DataSetName = "_prof_basesDataSet";
+            this._prof_basesDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+            // 
+            // profbasesDataSetBindingSource
+            // 
+            this.profbasesDataSetBindingSource.DataSource = this._prof_basesDataSet;
+            this.profbasesDataSetBindingSource.Position = 0;
+            // 
+            // uOuDn
+            // 
+            this.uOuDn.Location = new System.Drawing.Point(243, 326);
+            this.uOuDn.Name = "uOuDn";
+            this.uOuDn.Size = new System.Drawing.Size(309, 20);
+            this.uOuDn.TabIndex = 29;
+            // 
+            // ouType
+            // 
+            this.ouType.Location = new System.Drawing.Point(558, 326);
+            this.ouType.Name = "ouType";
+            this.ouType.Size = new System.Drawing.Size(205, 20);
+            this.ouType.TabIndex = 30;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(774, 753);
+            this.Controls.Add(this.ouType);
+            this.Controls.Add(this.uOuDn);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.button2);
@@ -234,6 +269,8 @@
             this.Name = "Form1";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this._prof_basesDataSet)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.profbasesDataSetBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -260,7 +297,10 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button button3;
-
+        private _prof_basesDataSet _prof_basesDataSet;
+        private System.Windows.Forms.BindingSource profbasesDataSetBindingSource;
+        private System.Windows.Forms.TextBox uOuDn;
+        private System.Windows.Forms.TextBox ouType;
     }
 }
 

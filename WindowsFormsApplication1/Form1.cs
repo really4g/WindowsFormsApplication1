@@ -34,8 +34,7 @@ namespace WindowsFormsApplication1
             int i=0;
             ArrayList alDomains = ADUnit.EnumerateDomains();
             do
-                {
-                    
+                {                   
                     TreeNode newNode = new TreeNode(alDomains[i] as String);
                     
                     DomainTree.Nodes.Add(newNode);
@@ -45,13 +44,28 @@ namespace WindowsFormsApplication1
                     ArrayList OUs = ADUnit.EnumerateOU(ADUnit.FriendlyDomainToLdapDomain(newNode.Text));
 
                     do
-                    {
-                        string ouname = OUs[j] as string;
-                        TreeNode OU = new TreeNode(ouname);
-                        DomainTree.SelectedNode.Nodes.Add(OU);
+                        {
+                            //
+                            string ouname = OUs[j] as string;                            
+                            if (ADUnit.WhatAdObjectIs(ouname, objectCategory.OrgUnit) == true)
+                            {
+                                ArrayList AdUnitAttr = ADUnit.GetUsedAttributes(ouname);
+                                if (AdUnitAttr.IndexOf("name") >= 0)
+                                {
+                                    string ouSmallName = ADUnit.GetADObjectProperty(ouname, "name");
+                                    TreeNode OU = new TreeNode(ouSmallName);
+                                    ADNode _adNode = new ADNode();
+                                    _adNode.ou = OUs[j] as string;
+                                    _adNode.dn = ADUnit.GetADObjectProperty(ouname, "distinguishedName");
+                                    _adNode.ObjCat = ADUnit.GetADObjectProperty(ouname, "objectCategory");
+                                    OU.Tag = _adNode;
 
-                        j++;
-                    } while (i <= OUs.Count - 1);
+                                    //TreeNode OU = new TreeNode(ouname);
+                                    DomainTree.SelectedNode.Nodes.Add(OU);
+                                };
+                            };
+                            j++;
+                        } while (j <= OUs.Count - 1);
                     
 
                     i++;
@@ -59,5 +73,32 @@ namespace WindowsFormsApplication1
             while (i <= (alDomains.Count - 1));
 
         }
+
+        private void DomainTree_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            if (DomainTree.SelectedNode != null)
+            {
+                uOuDn.Text = DomainTree.SelectedNode.Tag as string;
+            };
+        }
+
+        private void DomainTree_DoubleClick(object sender, EventArgs e)
+        {
+            if (DomainTree.SelectedNode != null)
+            {
+                //uOuDn.Text = DomainTree.SelectedNode.Tag as string;
+                ouType.Text = ADUnit.GetADObjectProperty((DomainTree.SelectedNode.Tag as ADNode).ou, "objectCategory");
+                Boolean isTrue = ADUnit.WhatAdObjectIs((DomainTree.SelectedNode.Tag as ADNode).ou, objectCategory.OrgUnit);
+                if (isTrue.Equals(true)) { MessageBox.Show(objectCategory.OrgUnit); };
+            };
+        }
     }
+    public class ADNode
+    {
+        public string ou = "";
+        public string dn = "";
+        public Boolean Expanded = false;
+        public Boolean isContainer = true;
+        public string ObjCat = objectCategory.OrgUnit;
+    };
 }

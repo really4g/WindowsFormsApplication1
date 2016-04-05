@@ -27,6 +27,18 @@ namespace WindowsFormsApplication1
     {
         distinguishedName, ObjectGUID
     }
+
+    public class objectCategory
+    {
+        public const string OrgUnit = "CN=Organizational-Unit,CN=Schema,CN=Configuration";
+        public const string Container = "CN=Container,CN=Schema,CN=Configuration";
+        public const string Domain = "CN=Domain-DNS,CN=Schema,CN=Configuration";
+        public const string Computer= "CN=Computer,CN=Schema,CN=Configuration";
+        public const string SecurityGroup = "CN=Group,CN=Schema,CN=Configuration";
+        public const string User = "CN=Person,CN=Schema,CN=Configuration";
+        public const string SharedFolder = "CN=Volume,CN=Schema,CN=Configuration";
+    }
+
     static class Constants
     {
         //User Account Control Flags
@@ -155,7 +167,8 @@ namespace WindowsFormsApplication1
             try
             {
                 string ldapPf = null;
-                if (OuDn.Substring(1, 7) == "LDAP://") { ldapPf = "LDAP://"; } else { ldapPf = ""; };
+                if (OuDn.Substring(0, 7) == "LDAP://") {ldapPf = ""; } else { ldapPf = "LDAP://"; };
+                
                 DirectoryEntry directoryObject = new DirectoryEntry(ldapPf + OuDn);
                 foreach (DirectoryEntry child in directoryObject.Children)
                 {
@@ -176,6 +189,39 @@ namespace WindowsFormsApplication1
             return alObjects;
         }
 
+        public static Boolean WhatAdObjectIs(string OuDn,string ObjCat)
+        {
+            Boolean Result = false;
+            //  
+            string ldapPf = null;
+            if (OuDn.Substring(0, 7) == "LDAP://") { ldapPf = ""; } else { ldapPf = "LDAP://"; };
+            DirectoryEntry ent = new DirectoryEntry(ldapPf+OuDn);
+            string rProperty = ent.Properties["ObjectCategory"].Value.ToString();
+            Result = (rProperty.Substring(0, ObjCat.Length) == ObjCat);
+            return Result;
+        }
+
+        public static string GetADObjectProperty(string OuDn, string property)
+        {
+            string ldapPf = null;
+            if (OuDn.Substring(0, 7) == "LDAP://") { ldapPf = ""; } else { ldapPf = "LDAP://"; };
+            DirectoryEntry ent = new DirectoryEntry(ldapPf+OuDn);
+            string rProperty = ent.Properties[property].Value.ToString();
+            return rProperty;
+        }
+
+        
+        public static ArrayList GetADObjectPropertyMV(string OuDn, string property)
+        {
+            string ldapPf = null;
+            if (OuDn.Substring(0, 7) == "LDAP://") { ldapPf = ""; } else { ldapPf = "LDAP://"; };
+            DirectoryEntry ent = new DirectoryEntry(ldapPf + OuDn);
+            ArrayList rProperty = null;
+            foreach (string prop in ent.Properties[property]) {
+                rProperty.Add(prop);
+            };            
+            return rProperty;
+        }
         //Enumerate Directory Entry Settings
         //One of the nice things about the 2.0 classes is the ability to get and set a configuration object for your directoryEntry objects.
         public static void DirectoryEntryConfigurationSettings(string domainADsPath)
@@ -215,7 +261,7 @@ namespace WindowsFormsApplication1
         {
             bool found = false;
             string ldapPf = null;
-            if (objectPath.Substring(1, 7) == "LDAP://") { ldapPf = "LDAP://"; } else { ldapPf = ""; };
+            if (objectPath.Substring(0, 7) == "LDAP://") { ldapPf = ""; } else { ldapPf = "LDAP://"; };
             if (DirectoryEntry.Exists(ldapPf + objectPath))
             {
                 found = true;
@@ -232,10 +278,10 @@ namespace WindowsFormsApplication1
         {
             //For brevity, removed existence checks
             string ldapPf = null;
-            if (objectLocation.Substring(1, 7) == "LDAP://") { ldapPf = "LDAP://"; } else { ldapPf = ""; };
+            if (objectLocation.Substring(0, 7) == "LDAP://") { ldapPf = ""; } else { ldapPf = "LDAP://"; };
             DirectoryEntry eLocation = new DirectoryEntry(ldapPf + objectLocation);
 
-            if (newLocation.Substring(1, 7) == "LDAP://") { ldapPf = "LDAP://"; } else { ldapPf = ""; };
+            if (newLocation.Substring(0, 7) == "LDAP://") { ldapPf = ""; } else { ldapPf = "LDAP://"; };
             DirectoryEntry nLocation = new DirectoryEntry(ldapPf + newLocation);
             string newName = eLocation.Name;
             eLocation.MoveTo(nLocation, newName);
@@ -287,7 +333,7 @@ namespace WindowsFormsApplication1
         public static ArrayList GetUsedAttributes(string objectDn)
         {
             string ldapPf = null;
-            if (objectDn.Substring(1, 7) == "LDAP://") { ldapPf = "LDAP://"; } else { ldapPf = ""; };
+            if (objectDn.Substring(0, 7) == "LDAP://") { ldapPf = ""; } else { ldapPf = "LDAP://"; };
             DirectoryEntry objRootDSE = new DirectoryEntry(ldapPf + objectDn);
             ArrayList props = new ArrayList();
 
@@ -304,7 +350,7 @@ namespace WindowsFormsApplication1
         {
             string distinguishedName = string.Empty;
             string ldapPf = null;
-            if (LdapDomain.Substring(1, 7) == "LDAP://") { ldapPf = "LDAP://"; } else { ldapPf = ""; };
+            if (LdapDomain.Substring(0, 7) == "LDAP://") { ldapPf = ""; } else { ldapPf = "LDAP://"; };
             string connectionPrefix = ldapPf + LdapDomain;
             DirectoryEntry entry = new DirectoryEntry(connectionPrefix);
             DirectorySearcher mySearcher = new DirectorySearcher(entry);
@@ -393,7 +439,7 @@ namespace WindowsFormsApplication1
         {
             string oGUID = string.Empty;
             string ldapPf = null;
-            if (ldapPath.Substring(1, 7) == "LDAP://") { ldapPf = "LDAP://"; } else { ldapPf = ""; };
+            if (ldapPath.Substring(0, 7) == "LDAP://") { ldapPf = ""; } else { ldapPf = "LDAP://"; };
             string connectionPrefix = ldapPf + ldapPath;
             DirectoryEntry directoryObject = new DirectoryEntry(connectionPrefix);
             DirectoryEntry networkShare = directoryObject.Children.Add("CN=" + 
@@ -533,7 +579,7 @@ namespace WindowsFormsApplication1
             try
             {
                 string ldapPf = null;
-                if (ldapPath.Substring(1, 7) == "LDAP://") { ldapPf = "LDAP://"; } else { ldapPf = ""; };
+                if (ldapPath.Substring(0, 7) == "LDAP://") { ldapPf = ""; } else { ldapPf = "LDAP://"; };
                 string connectionPrefix = ldapPf + ldapPath;
                 DirectoryEntry dirEntry = new DirectoryEntry(connectionPrefix);
                 DirectoryEntry newUser = dirEntry.Children.Add
@@ -568,7 +614,7 @@ namespace WindowsFormsApplication1
             try
             {
                 string ldapPf = null;
-                if ( ldapPath.Substring(1, 7) == "LDAP://") { ldapPf = "LDAP://"; } else { ldapPf = ""; };
+                if ( ldapPath.Substring(0, 7) == "LDAP://") { ldapPf = ""; } else { ldapPf = "LDAP://"; };
                 string connectionPrefix = ldapPf + ldapPath;
                 DirectoryEntry dirEntry = new DirectoryEntry(connectionPrefix);
                 DirectoryEntry newUser = dirEntry.Children.Add
